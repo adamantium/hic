@@ -1,0 +1,35 @@
+h1 {
+	font-family: 'Six Caps';
+	font-size: 4em;
+	font-weight: 200;
+}
+
+#personal-menu {
+	list-style-type: none;
+}
+
+#personal-menu li {
+	float: left;
+}
+
+#navbar {
+}
+
+#menu {
+	list-style-type: none;
+
+	display: table;
+
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: -4px;
+	margin-bottom: 13px;
+}
+
+#menu li {
+	font-family: 'Georgia';
+	font-size: 1em;
+	float: left;
+
+	margin-right: 25px;
+}

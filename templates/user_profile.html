@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}HIC : Admin Page{% endblock title %}
+
+{% block sidebar %}
+<ul>
+	<li><a href='../'>Dashboard</a></li>
+	<li><a href='list'>Members</a></li>
+	<li><a href='../forum/list'>Forum</a></li>
+</ul>
+{% endblock sidebar %}
+
+{% block content %}
+<div>
+	name: {{ member.name }}
+	pic: <img src="/user/pic?key={{ member.key }}"></img> <br />
+	nickname: {{user.nickname}} <br />
+	email: {{user.email}} <br />
+</div>
+{% endblock content %}

@@ -1,0 +1,26 @@
+application: webhic
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /css
+  static_dir: css
+
+- url: /js
+  static_dir: js
+
+- url: /admin/.*
+  script: admin.py
+  login: admin
+  auth_fail_action: unauthorized
+
+- url: /user/.*
+  script: user.py
+  login: required
+  
+- url: /forum/.*
+  script: board.py
+
+- url: /
+  script: main.py

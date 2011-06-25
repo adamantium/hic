@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}HIC : Admin Page{% endblock title %}
+
+{% block sidebar %}
+<ul>
+	<li><a href='../'>Dashboard</a></li>
+	<li><a href='list'>Members</a></li>
+	<li><a href='../forum/list'>Forum</a></li>
+</ul>
+{% endblock sidebar %}
+
+{% block content %}
+<div>
+	<form action="/user/signup" enctype="multipart/form-data" method="post">
+		<div>
+			<label for="name">Name :</label>
+			<input type="text" name="name" id="name" />
+		</div>
+		<div>
+			<label for="age">age :</label>
+			<input type="text" name="age" id="age" />
+		</div>
+		<div>
+			nickname: {{user.nickname}} <br />
+			email: {{user.email}}
+		</div>
+		<div>
+			<label for="pic">picture :</label>
+			<input type="file" name="pic" />
+		</div>
+		<input type="submit" value="submit" />
+	</form>
+</div>
+{% endblock content %}
