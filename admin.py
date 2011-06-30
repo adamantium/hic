@@ -37,7 +37,7 @@ class MainHandler(webapp.RequestHandler):
 
 class DashboardHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write(sc_render_template(self, ''))
+        self.response.out.write(sc_render_template(self, 'admin_dashboard.html', {}))
 
 class MemberListHandler(webapp.RequestHandler):
     def get(self):
