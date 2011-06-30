@@ -25,31 +25,11 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
 from models import *
+from shortcuts import *
 
 # Constants
 MEMBERS_PER_PAGE = 20
 CATEGORIES_PER_PAGE = 10
-
-def base_template(cls):
-    user = users.get_current_user()
-    user_detail = None
-    if user:
-        user_detail = UserDetail.get_by_user(user)
-
-    q = UserDetail.all()
-    results = q.fetch(30)
-    
-    base_template_values = {
-        "page_title": "HIC",
-        "login_url": users.create_login_url(cls.request.uri),
-        "logout_url": users.create_logout_url(cls.request.uri),
-        "profile_url": "/user/form?type=usermodify",
-        "user": user,
-        "user_detail": user_detail,
-        "is_admin": users.is_current_user_admin()
-    }
-
-    return base_template_values
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
@@ -57,17 +37,7 @@ class MainHandler(webapp.RequestHandler):
 
 class DashboardHandler(webapp.RequestHandler):
     def get(self):
-        q = UserDetail.all()
-        results = q.fetch(30)
-        
-        base_template_values = base_template(self)
-        
-        template_values = {
-            "users": results
-        }
-
-        path = os.path.join(os.path.dirname(__file__), 'admin.html')
-        self.response.out.write(template.render(path, dict(base_template_values, **template_values)))
+        self.response.out.write(sc_render_template(self, ''))
 
 class MemberListHandler(webapp.RequestHandler):
     def get(self):
