@@ -4,23 +4,20 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /css
-  static_dir: css
-
-- url: /js
-  static_dir: js
+- url: /assets
+  static_dir: assets
 
 - url: /admin/.*
-  script: admin.py
+  script: controllers/admin.py
   login: admin
   auth_fail_action: unauthorized
 
 - url: /user/.*
-  script: user.py
+  script: controllers/user.py
   login: required
   
 - url: /forum/.*
-  script: board.py
+  script: controllers/forum.py
 
 - url: /
   script: main.py

@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import os
 import urllib
 import logging
@@ -33,30 +34,23 @@ CATEGORIES_PER_PAGE = 10
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
-        self.redirect('/admin/dashboard')
+        self.redirect("/admin/dashboard")
 
 class DashboardHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write(sc_render_template(self, 'admin_dashboard.html', {}))
+        sc_render_and_response(self, "admin_dashboard.html", {})
 
 class MemberListHandler(webapp.RequestHandler):
     def get(self):
-        page = self.request.get('page')
+        page = self.request.get("page")
         if not page:
             page = 1
         else:
             page = int(page)
-
-        base_template_values = base_template(self) 
-        query = UserDetail.all()
+            
+        query = Member.all()
         results = query.fetch(limit=MEMBERS_PER_PAGE, offset=(page-1)*MEMBERS_PER_PAGE)
-
-        template_values = {
-            "users": results
-        }
-
-        path = os.path.join(os.path.dirname(__file__), 'admin_member_list.html')
-        self.response.out.write(template.render(path, dict(base_template_values, **template_values)))
+        sc_render_and_response(self, "admin_member_list.html", {"users": results})
 
 class CategoryListHandler(webapp.RequestHandler):
     def get(self):
@@ -66,26 +60,9 @@ class CategoryListHandler(webapp.RequestHandler):
         else:
             page = int(page)
 
-        base_template_values = base_template(self) 
-        query = Category.all()
-        query.filter('belong_to =', 'forum')
+        query = ForumCategory.all()
         results = query.fetch(limit=MEMBERS_PER_PAGE, offset=(page-1)*MEMBERS_PER_PAGE)
-
-        template_values = {
-            "categories": results
-        }
-
-        path = os.path.join(os.path.dirname(__file__), 'admin_category_list.html')
-        self.response.out.write(template.render(path, dict(base_template_values, **template_values)))
-
-class UserConfirmFormHandler(webapp.RequestHandler):
-    def get(self):
-        user = users.get_current_user()
-        if user:
-            path = os.path.join(os.path.dirname(__file__), 'userinfo_input.html')
-            self.response.out.write(template.render(path, {"user": user}))
-        else:
-            self.redirect(users.create_login_url(self.request.uri))
+        sc_render_and_response(self, "admin_category_list.html", {"categories": results})
 
 class DoHandler(webapp.RequestHandler):
     def get(self):
@@ -125,24 +102,7 @@ class DoHandler(webapp.RequestHandler):
             pass
 
     def post(self):
-        action_type = urllib.unquote(self.request.get('type'))
-        action = urllib.unquote(self.request.get('action'))
-        logging.debug(action_type + ', ' + action)
-        if action_type == "user":
-            pass
-        elif action_type == "forum":
-            if action == "addcategory":
-                category_name = self.request.get('name')
-                category_des = self.request.get('description')
-                category = Category(name=category_name,
-                                    description=category_des,
-                                    order=1,
-                                    belong_to='forum')
-                category.put()
-            elif action == "removecategory":
-                category_name = self.request.get('name')
-        self.redirect('forum/list')        
-                
+        pass
         #TODO: Fill in post method action
         
 class UserDetailInputHandler(webapp.RequestHandler):
@@ -160,7 +120,7 @@ def main():
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication([('/admin/', MainHandler),
                                         ('/admin/dashboard', DashboardHandler),
-                                        ('/admin/members/list', MemberListHandler),
+                                        ('/admin/member/list', MemberListHandler),
                                         ('/admin/forum/list', CategoryListHandler),
                                         ('/admin/do', DoHandler)],
                                          debug=True)

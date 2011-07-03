@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}HIC : Admin Page{% endblock title %}
+
+{% block sidebar %}
+<ul>
+	<li><a href='/admin/dashboard'>Dashboard</a></li>
+	<li><a href='/admin/member/list'>Members</a></li>
+	<li><a href='/admin/forum/list'>Forum</a></li>
+</ul>
+{% endblock sidebar %}
+
+{% block content %}
+<div>
+	<form action='/admin/do' method='post'>
+		<input type='hidden' name='type' value='forum' />
+		<input type='hidden' name='action' value='addcategory' />
+
+		<label for='name'>Name</label>
+		<input type='text' name='name' id='name' />
+		
+		<label for='description'>Description</label>
+		<input type='text' name='description' id='description' />
+
+		<input type="submit" value="add" />
+	</form>
+</div>
+<table>
+	<thead>
+		<tr>
+		<th>Name</th>
+		<th>Description</th>
+		<th>Articles</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for category in categories %}
+		<tr>
+		<td>{{ category.name }}</td>
+		<td>{{ category.description }}</td>
+		<td>0</td>
+		<tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% endblock content %}

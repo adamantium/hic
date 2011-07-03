@@ -22,8 +22,11 @@ def sc_base_template_values(handler):
     return base_template_values
 
 def sc_render_template(handler, filename, template_values):
-    path = os.path.join(os.path.dirname(__file__), 'templates/' + filename)
+    path = os.path.join(os.path.dirname(__file__), '../views/' + filename)
     return template.render(path, dict(sc_base_template_values(handler), **template_values))
+    
+def sc_render_and_response(handler, filename, template_values):
+    handler.response.out.write(sc_render_template(handler, filename, template_values))
     
 def sc_error(self):
     return "ERROR"

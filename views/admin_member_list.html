@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}HIC : Admin Page{% endblock title %}
+
+{% block sidebar %}
+<ul>
+	<li><a href='../'>Dashboard</a></li>
+	<li><a href='list'>Members</a></li>
+	<li><a href='../forum/list'>Forum</a></li>
+</ul>
+{% endblock sidebar %}
+
+{% block content %}
+<table>
+	<thead>
+		<tr>
+		<th>Index</th>
+		<th>E-mail</th>
+		<th>Name</th>
+		<th>Age</th>
+		<th>Confirm</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for user in users %}
+		<tr>
+		<td>{{ user.key.id }} </td>
+		<td>{{ user.user.email }}</td>
+		<td>{{ user.name }}</td>
+		<td>{{ user.age }}</td>
+		{% if user.confirmed %}
+			<td>confirmed</td>
+		{% else %}
+			<td><a href="/admin/do?type=user&action=confirm&target={{ user.key.id|urlencode }}">confirm</a></td>
+		{% endif %}
+		<tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% endblock content %}

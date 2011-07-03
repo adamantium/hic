@@ -24,7 +24,7 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
 from models import *
-from shortcuts import *
+from controllers.shortcuts import *
 
 class MainHandler(webapp.RequestHandler):
     def get(self):

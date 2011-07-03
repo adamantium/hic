@@ -3,25 +3,34 @@
 <head>
 	<meta charset="utf-8">
 	<title>{% block title %}{% endblock %}</title>
-	<link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection"/>
-	<link rel="stylesheet" href="/css/print.css" type="text/css" media="print"/>
+	<link rel="stylesheet" href="/assets/css/screen.css" type="text/css" media="screen, projection"/>
+	<link rel="stylesheet" href="/assets/css/print.css" type="text/css" media="print"/>
 	<!--[if lt IE 8]>
-		<link rel="stylesheet" href="/css/ie.css" type="text/css" media="screen, projection"/>
+		<link rel="stylesheet" href="/assets/css/ie.css" type="text/css" media="screen, projection"/>
 	<![endif]-->
-	<link rel="stylesheet" href="/css/main.css" type="text/css" media="all"/>
+	<link rel="stylesheet" href="/assets/css/main.css" type="text/css" media="all"/>
 	<link href="http://fonts.googleapis.com/css?family=Wire+One:regular" rel="stylesheet" type="text/css" >
 	<link href='http://fonts.googleapis.com/css?family=Six+Caps' rel='stylesheet' type='text/css'>
 
 	<!--<script src="https://www.gogle.com/jsapi?key=ABQIAAAA2IrREsbRfaxl6RnOyXG3OhSQksDmXtqmYCYAwE64PwRNrFlMkBQd15lAxRKt6bIi1RskG0BrKa-QQw" type="text/javascript"></script>-->
 	<script src="https://www.google.com/jsapi?key=ABQIAAAA2IrREsbRfaxl6RnOyXG3OhTwM0brOpm-All5BF6PoaKBxRWWERTM9DKv9dz-rxrdlWNPETpmtuRz5w" type="text/javascript"></script>
-	<script type="text/javascript" src="/js/head.min.js"></script>
-	<script type="text/javascript" src="/js/main.js"></script>
+	<script type="text/javascript" src="/assets/js/head.min.js"></script>
+	<script type="text/javascript" src="/assets/js/main.js"></script>
 </head>
 <body>
 	<div class="container">
-		<hr>
-		<div class="span-18 border">
+		<div class="span-2 border">
 			<h1>HIC</h1>
+		</div>
+		<div id="navbar" class="span-16 border">
+			<ul id="menu">
+				<li class="menu-item"><a href="/forum/">FORUM</a></li>
+				<li class="menu-item"><a href="/places/">PLACES</a></li>
+				<li class="menu-item"><a href="/language/">LANGUAGE CENTER</a></li>
+				{% if is_admin %}
+					<li class="menu-item"><a href="/admin/">ADMIN</a></li>
+				{% endif %}
+			</ul>
 		</div>
 		<div class="span-6 last">
 		{% if user %}
@@ -36,15 +45,8 @@
 		{% endif %}
 		</div>
 		<hr>
-		<div id="navbar" class="span-18 border">
-			<ul id="menu">
-				<li class="menu-item"><a href="/forum/">FORUM</a></li>
-				<li class="menu-item"><a href="/places/">PLACES</a></li>
-				<li class="menu-item"><a href="/language/">LANGUAGE CENTER</a></li>
-				{% if is_admin %}
-					<li class="menu-item"><a href="/admin/">ADMIN</a></li>
-				{% endif %}
-			</ul>
+		<div id="bcbar" class="span-18">
+		    breadcrumb
 		</div>
 		<div id="searchbar" class="span-6 last">
 			<form action="/search" method="post">
