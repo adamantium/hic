@@ -3,11 +3,6 @@
 <head>
 	<meta charset="utf-8">
 	<title>{% block title %}{% endblock %}</title>
-	<link rel="stylesheet" href="/assets/css/screen.css" type="text/css" media="screen, projection"/>
-	<link rel="stylesheet" href="/assets/css/print.css" type="text/css" media="print"/>
-	<!--[if lt IE 8]>
-		<link rel="stylesheet" href="/assets/css/ie.css" type="text/css" media="screen, projection"/>
-	<![endif]-->
 	<link rel="stylesheet" href="/assets/css/main.css" type="text/css" media="all"/>
 	<link href="http://fonts.googleapis.com/css?family=Wire+One:regular" rel="stylesheet" type="text/css" >
 	<link href='http://fonts.googleapis.com/css?family=Six+Caps' rel='stylesheet' type='text/css'>
@@ -18,11 +13,13 @@
 	<script type="text/javascript" src="/assets/js/main.js"></script>
 </head>
 <body>
-	<div class="container">
-		<div class="span-2 border">
-			<h1>HIC</h1>
+	<div class="container_12">
+		<div class="grid_1">
+			<div id="logo">
+			    HIC
+			</div>
 		</div>
-		<div id="navbar" class="span-16 border">
+		<div id="navbar" class="grid_8">
 			<ul id="menu">
 				<li class="menu-item"><a href="/forum/">FORUM</a></li>
 				<li class="menu-item"><a href="/places/">PLACES</a></li>
@@ -32,40 +29,38 @@
 				{% endif %}
 			</ul>
 		</div>
-		<div class="span-6 last">
+		<div class="grid_3">
 		{% if user %}
-			<h5>Welcome, {{ user.nickname }}</h5>
+			Welcome, {{ user.nickname }}
 			<ul id="personal-menu">
 				<li><a href="{{ logout_url }}">logout</a></li>
 				<li><a href="{{ profile_url }}">profile</a></li>
 			</ul>
 		{% else %}
-			<a href="{{ login_url }}"><h3>LOGIN</h3></a>
-			<h5>with your Google Account</h5>
+			<a href="{{ login_url }}">LOGIN</a>
+			with your Google Account
 		{% endif %}
 		</div>
-		<hr>
-		<div id="bcbar" class="span-18">
+		<div id="bcbar" class="grid_9">
 		    breadcrumb
 		</div>
-		<div id="searchbar" class="span-6 last">
+		<div id="searchbar" class="grid_3">
 			<form action="/search" method="post">
 				<input type="text" name="keyword" id="keyword" />
 				<input type="submit" value="search" />
 			</form> 
 		</div>
-		<hr>
-		<div class="span-18 border">
+		<div class="grid_9">
 			{% block content %}
 			{% endblock content%}
 		</div>
-		<div class="span-6 last">
+		<div class="grid_3">
 			{% block sidebar %}
 			{% endblock sidebar %}
 		</div>
 
 		<hr>
-		<div class="span-24">
+		<div class="grid_12">
 			footer
 		</div>
 	</div>
