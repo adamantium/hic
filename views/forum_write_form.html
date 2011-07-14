@@ -8,14 +8,18 @@ sidebar
 
 {% block content %}
 {{ category }}
-<form action="/forum/{{ category.code }}/write" method="post">
+<form action="/forum/{{ category.code }}/{% if for_modify %}{{ post.idx }}/modify{% else %}write{% endif %}" method="post">
     <div>
         <label for="title">TITLE</label>
-        <input type="text" name="title" id="title" />
+        <input type="text" name="title" id="title" 
+            {% if for_modify %}
+                value="{{ post.title }}"
+            {% endif %}
+        />
     </div>
     <div>
         <label for="content">CONTENT</label>
-        <textarea name="content" rows="15" cols="60"></textarea>
+        <textarea name="content" rows="15" cols="60">{% if for_modify %}{{ post.content }}{% endif %}</textarea>
     </div>
     <div>
         <input type="submit" value="post" />

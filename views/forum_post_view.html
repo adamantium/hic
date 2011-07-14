@@ -14,4 +14,11 @@ title: {{ post.title }}
 author: {{ post.author.nickname }}
 <br />
 content: {{ post.content }}
+<div>
+    <a href="/forum/{{ category }}/{{ post.idx }}/modify-form">modify</a>
+    <a href="/forum/{{ category }}/{{ post.idx }}/delete">delete</a>
+</div>
+<div>
+    <a href="/forum/{{ category }}/page/{{ page }}">list</a>
+</div>
 {% endblock content %}

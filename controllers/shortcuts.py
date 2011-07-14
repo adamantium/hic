@@ -9,6 +9,13 @@ from google.appengine.ext.webapp import template
 from models import Member, Category, ForumCategory
 
 #
+# Security Related Functions
+#
+
+
+    
+
+#
 # Template Related Functions
 #
 
@@ -44,7 +51,7 @@ def sc_error_page(handler, msg):
 #
 
 def sc_count(category_obj):
-    # TODO: NEED TO BE FIXED
+    # TODO: NEED TO BE FIXED. use memcache instead of category_obj.
     def increment_counter(category_obj):
         category_obj.count += 1
         category_obj.put()
@@ -73,6 +80,12 @@ def sc_validate_category(category_code, kind=None):
 	    return result
 	else:
 	    logging.debug("hello!")
+	    
+def sc_has_authority(user, post):
+    category_auth = False # TODO: Fill in when category specific admin function is available
+    post_auth = (post.author.user == user)
+    admin_auth = users.is_current_user_admin()
+    return (category_auth or post_auth or admin_auth)
 
 def sc_error(self):
     return "ERROR"

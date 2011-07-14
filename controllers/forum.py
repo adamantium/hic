@@ -47,7 +47,7 @@ class ListViewHandlerWithPage(webapp.RequestHandler):
         category_obj = sc_validate_category(category, kind='forum')
         if category_obj:
             query = ForumPost.all()
-            query.filter('category.code =', category)
+            query.filter('category =', category_obj)
             results = query.fetch(limit=POSTS_PER_PAGE, offset=(page-1)*POSTS_PER_PAGE)
             template_values = {
                 'category': category_obj,
@@ -62,9 +62,7 @@ class PostViewHandler(webapp.RequestHandler):
     def get(self, category, post_idx):
         category_obj = sc_validate_category(category, kind='forum')
         if category_obj:
-            query = ForumPost.all()
-            query.filter('idx =', int(post_idx))
-            result = query.get()        
+            result = ForumPost.get_by_idx(int(post_idx), category_obj)       
             sc_render_and_response(self, "forum_post_view.html", {'category': category, 'post': result, 'page': 1})
         else:
             sc_error_page(self, "Unategory")
@@ -74,9 +72,7 @@ class PostViewHandlerWithPage(webapp.RequestHandler):
         page = int(page)
         category_obj = sc_validate_category(category, kind='forum')
         if category_obj:
-            query = ForumPost.all()
-            query.filter('idx =', int(post_idx))
-            result = query.get()
+            result = ForumPost.get_by_idx(int(post_idx), category_obj)
             sc_render_and_response(self, "forum_post_view.html", {'category': category, 'post': result, 'page': page})
         else:
             sc_error_page(self, "Category not found")
@@ -85,7 +81,7 @@ class PostWriteFormHandler(webapp.RequestHandler):
     def get(self, category):
         category_obj = sc_validate_category(category, kind='forum')
         if category_obj:     
-            sc_render_and_response(self, "forum_write_form.html", {'category': category_obj, 'page': 1})
+            sc_render_and_response(self, "forum_write_form.html", {'category': category_obj, 'for_modify': False, 'page': 1})
         else:
             sc_error_page(self, "Category not found")
 
@@ -107,16 +103,62 @@ class PostWriteHandler(webapp.RequestHandler):
             sc_error_page(self, "Category not found")
         
 class PostModifyFormHandler(webapp.RequestHandler):
-    def get(self):
-        pass
+    def get(self, category_code, post_idx):
+        category_obj = sc_validate_category(category_code, kind='forum')
+        post_idx = int(post_idx)
+        if category_obj:
+            result = ForumPost.get_by_idx(post_idx, category_obj)
+            if result:
+                if sc_has_authority(users.get_current_user(), result):
+                    template_values = {
+                        "category": category_obj,
+                        "for_modify": True,
+                        "post": result
+                    }
+                    sc_render_and_response(self, "forum_write_form.html", template_values)
+                else:
+                    sc_error_page(self, "You have no authority for the request.")
+            else:
+                sc_error_page(self, "Post Index is not available")
+        else:
+            sc_error_page(self, "Undifined Category")
         
 class PostModifyHandler(webapp.RequestHandler):
-    def get(self):
-        pass
+    def post(self, category_code, post_idx):
+        title = self.request.get('title')
+        content = self.request.get('content')
+        category_obj = sc_validate_category(category_code, kind='forum')
+        if category_obj:
+            result = ForumPost.get_by_idx(int(post_idx), category_obj)
+            if result:
+                if sc_has_authority(users.get_current_user(), result):
+                    result.title = title
+                    result.content = content
+                    result.put()
+                    self.redirect('/forum/%s/' % (category_code, ))
+                else:
+                    sc_error_page(self, "You have no authority for the request.")
+            else:
+                sc_error_page(self, "Post Index is available")
+        else:
+            sc_error_page(self, "Undifined Category")
         
 class PostDeleteHandler(webapp.RequestHandler):
-    def get(self):
-        pass
+    def get(self, category_code, post_idx):
+        category_obj = sc_validate_category(category_code, kind='forum')
+        if category_obj:
+            result = ForumPost.get_by_idx(int(post_idx), category_obj)
+            if result:
+                if sc_has_authority(users.get_current_user(), result):
+                    result.status = 1
+                    result.put()
+                    self.redirect('/forum/%s/' % (category_code, ))
+                else:
+                    sc_error_page(self, "You have no authority for the request.")
+            else:
+                sc_error_page(self, "Post Index is available")
+        else:
+            sc_error_page(self, "Undifined Category")
 	
 def main():
     logging.getLogger().setLevel(logging.DEBUG)
