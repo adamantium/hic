@@ -22,8 +22,10 @@ class Member(db.Model):
     
 class Category(polymodel.PolyModel):
     name = db.StringProperty(required=True)
+    code = db.StringProperty(required=True)
     description = db.StringProperty()
-    count = db.IntegerProperty()
+    count = db.IntegerProperty(default=0)
+    total = db.IntegerProperty()
 
 class ForumCategory(Category):
     next = db.SelfReferenceProperty()
@@ -35,7 +37,7 @@ class Post(polymodel.PolyModel):
     creation = db.DateTimeProperty(auto_now_add=True)
     last_modified = db.DateTimeProperty(auto_now=True)
 
-class Article(Post):
+class ForumPost(Post):
     category = db.ReferenceProperty(ForumCategory)
     content = db.TextProperty()
     attached = db.BlobProperty()

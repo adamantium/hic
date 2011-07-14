@@ -1,3 +1,4 @@
 *.tmproj
 *.esproj
 *.pyc
+*.DS_Store

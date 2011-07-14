@@ -15,11 +15,12 @@ from controllers.shortcuts import *
 
 class UserSignupFormHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write(sc_render_template(self, "user_signup_form.html", {}))
+        sc_render_and_response(self, "user_singup_form.html", {})
 
 class UserModifyFormHandelr(webapp.RequestHandler):
     def get(self):
-        self.response.out.write(sc_render_template(self, "user_signup_form.html", {}))
+        # TODO: Load original user profile to fill in blanks
+        sc_render_and_response(self, "user_signup_form.html", {})
 
 class UserSignupHandler(webapp.RequestHandler):
     def post(self):

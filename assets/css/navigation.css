@@ -17,19 +17,12 @@ h1 {
 
 #menu {
 	list-style-type: none;
-
-	display: table;
-
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: -4px;
-	margin-bottom: 13px;
 }
 
 #menu li {
 	font-family: 'Georgia';
-	font-size: 1em;
+	font-size: 1.2em;
+	
+	background-color: rgb(30, 255, 35);
 	float: left;
-
-	margin-right: 25px;
 }

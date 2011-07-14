@@ -52,7 +52,7 @@ class MemberListHandler(webapp.RequestHandler):
         results = query.fetch(limit=MEMBERS_PER_PAGE, offset=(page-1)*MEMBERS_PER_PAGE)
         sc_render_and_response(self, "admin_member_list.html", {"users": results})
 
-class CategoryListHandler(webapp.RequestHandler):
+class ForumCategoryListHandler(webapp.RequestHandler):
     def get(self):
         page = self.request.get('page')
         if not page:
@@ -63,6 +63,17 @@ class CategoryListHandler(webapp.RequestHandler):
         query = ForumCategory.all()
         results = query.fetch(limit=MEMBERS_PER_PAGE, offset=(page-1)*MEMBERS_PER_PAGE)
         sc_render_and_response(self, "admin_category_list.html", {"categories": results})
+
+class ForumCategoryAddHandler(webapp.RequestHandler):
+    def post(self):
+    	category_name = self.request.get('name')
+    	category_des = self.request.get('description')
+    	category = ForumCategory(name=category_name,
+    	                    code=category_name.replace(" ", "").lower(),
+    	                    count=1,
+    	                    description=category_des)
+    	category.put()
+    	self.redirect('/admin/forum/list')
 
 class DoHandler(webapp.RequestHandler):
     def get(self):
@@ -121,7 +132,8 @@ def main():
     application = webapp.WSGIApplication([('/admin/', MainHandler),
                                         ('/admin/dashboard', DashboardHandler),
                                         ('/admin/member/list', MemberListHandler),
-                                        ('/admin/forum/list', CategoryListHandler),
+                                        ('/admin/forum/list', ForumCategoryListHandler),
+                                        ('/admin/forum/add', ForumCategoryAddHandler),                                  
                                         ('/admin/do', DoHandler)],
                                          debug=True)
     util.run_wsgi_app(application)

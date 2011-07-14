@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}HIC - Forum - {{ category.name }}{% endblock title %}
+
+{% block sidebar %}
+sidebar
+{% endblock sidebar %}
+
+{% block content %}
+{{ category.name }}
+<br />
+    {% for post in posts %}
+        <div>
+            <a href="/forum/{{ category.code }}/page/{{ page }}/{{ post.idx }}">{{ post.title }}</a>
+            <a href="#">{{ post.author.name }}</a>
+            <br>
+            {{ post.creation }}
+        </div>
+    {% endfor %}
+<br />
+{{ page }}
+<a href="/forum/{{ category.code }}/write-form">write</a>
+{% endblock content %}

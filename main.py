@@ -18,6 +18,7 @@ import os
 import urllib
 import logging
 
+from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
@@ -33,10 +34,18 @@ class MainHandler(webapp.RequestHandler):
             self.redirect("/user/signup-form")
         else:
             self.response.out.write(sc_render_template(self, "base.html", {}))
+            
+class ClearMemcacheHandler(webapp.RequestHandler):
+    def get(self):
+        if memcache.flush_all():
+            self.response.out.write("memcache is flushed")
+        else:
+            self.response.out.write("memcache flushing failed")
 
 def main():
     logging.getLogger().setLevel(logging.DEBUG) 
-    application = webapp.WSGIApplication([('/', MainHandler)
+    application = webapp.WSGIApplication([('/', MainHandler),
+                                        ('/cmc', ClearMemcacheHandler)
                                         ],
                                          debug=True)
     util.run_wsgi_app(application)

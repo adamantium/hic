@@ -18,6 +18,7 @@ handlers:
   
 - url: /forum/.*
   script: controllers/forum.py
+  login: required
 
-- url: /
+- url: /.*
   script: main.py

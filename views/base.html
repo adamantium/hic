@@ -14,20 +14,10 @@
 </head>
 <body>
 	<div class="container_12">
-		<div class="grid_1">
+		<div class="grid_9">
 			<div id="logo">
-			    HIC
+			    Hyangnam International Community
 			</div>
-		</div>
-		<div id="navbar" class="grid_8">
-			<ul id="menu">
-				<li class="menu-item"><a href="/forum/">FORUM</a></li>
-				<li class="menu-item"><a href="/places/">PLACES</a></li>
-				<li class="menu-item"><a href="/language/">LANGUAGE CENTER</a></li>
-				{% if is_admin %}
-					<li class="menu-item"><a href="/admin/">ADMIN</a></li>
-				{% endif %}
-			</ul>
 		</div>
 		<div class="grid_3">
 		{% if user %}
@@ -35,12 +25,21 @@
 			<ul id="personal-menu">
 				<li><a href="{{ logout_url }}">logout</a></li>
 				<li><a href="{{ profile_url }}">profile</a></li>
+				{% if is_admin %}
+				    <li><a href="/admin/">admin</a></li>
+				{% endif %}
 			</ul>
 		{% else %}
 			<a href="{{ login_url }}">LOGIN</a>
 			with your Google Account
 		{% endif %}
 		</div>
+		<ul id="menu">
+		    <li class="menu-item grid_3"><a href="/about/">ABOUT</a></li>
+			<li class="menu-item grid_3"><a href="/forum/">FORUM</a></li>
+			<li class="menu-item grid_3"><a href="/places/">PLACES</a></li>
+			<li class="menu-item grid_3"><a href="/language/">LANGUAGE CENTER</a></li>
+		</ul>
 		<div id="bcbar" class="grid_9">
 		    breadcrumb
 		</div>

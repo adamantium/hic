@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}HIC : Admin Page{% endblock title %}
+
+{% block sidebar %}
+sidebar
+{% endblock sidebar %}
+
+{% block content %}
+{{ category }}
+<br />
+title: {{ post.title }}
+<br />
+author: {{ post.author.nickname }}
+<br />
+content: {{ post.content }}
+{% endblock content %}

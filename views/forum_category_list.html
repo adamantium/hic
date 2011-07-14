@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}HIC : Admin Page{% endblock title %}
+
+{% block sidebar %}
+<ul>
+	<li><a href='/admin/dashboard'>Dashboard</a></li>
+	<li><a href='/admin/member/list'>Members</a></li>
+	<li><a href='/admin/forum/list'>Forum</a></li>
+</ul>
+{% endblock sidebar %}
+
+{% block content %}
+<table>
+	{% for category in categories %}
+		<tr>
+		    <td><a href="/forum/{{ category.code }}/">{{ category.name }}</td>
+		</tr>
+		<tr>
+		    <td>{{ category.description }}</td>
+		<tr>
+	{% endfor %}
+</table>
+{% endblock content %}

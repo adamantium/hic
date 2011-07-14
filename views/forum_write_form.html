@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}HIC - Forum - New post{% endblock title %}
+
+{% block sidebar %}
+sidebar
+{% endblock sidebar %}
+
+{% block content %}
+{{ category }}
+<form action="/forum/{{ category.code }}/write" method="post">
+    <div>
+        <label for="title">TITLE</label>
+        <input type="text" name="title" id="title" />
+    </div>
+    <div>
+        <label for="content">CONTENT</label>
+        <textarea name="content" rows="15" cols="60"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="post" />
+    </div>
+</form>
+{% endblock content %}

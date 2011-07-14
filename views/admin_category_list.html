@@ -12,10 +12,7 @@
 
 {% block content %}
 <div>
-	<form action='/admin/do' method='post'>
-		<input type='hidden' name='type' value='forum' />
-		<input type='hidden' name='action' value='addcategory' />
-
+	<form action='/admin/forum/add' method='post'>
 		<label for='name'>Name</label>
 		<input type='text' name='name' id='name' />
 		
