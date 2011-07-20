@@ -2,3 +2,4 @@
 *.esproj
 *.pyc
 *.DS_Store
+.idea

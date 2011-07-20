@@ -8,13 +8,7 @@ from google.appengine.ext.webapp import template
 
 from models import Member, Category, ForumCategory
 
-#
-# Security Related Functions
-#
-
-
-    
-
+   
 #
 # Template Related Functions
 #
@@ -51,7 +45,7 @@ def sc_error_page(handler, msg):
 #
 
 def sc_count(category_obj):
-    # TODO: NEED TO BE FIXED. use memcache instead of category_obj.
+    # TODO: NEED TO BE FIXED. Use memcache instead of category_obj.
     def increment_counter(category_obj):
         category_obj.count += 1
         category_obj.put()
@@ -62,26 +56,41 @@ def sc_count(category_obj):
     if memcache.incr(key, initial_value=count):
         db.run_in_transaction(increment_counter, category_obj)
         return count + 1
-    
+
+def validate_category(handler, category_code, kind=None):
+    logging.getLogger().setLevel(logging.DEBUG)
+    query = None
+    if kind is None:
+        query = Category.all()
+    elif kind == "forum":
+        query = ForumCategory.all()
+    if query is not None:
+        query.filter('code =', category_code)
+        result = query.get()
+        if result:
+            return result        
+    logging.error("Category is not found. Requested category code: " + category_code)
+    handler.error(500)
+  
 def sc_validate_category(category_code, kind=None):
     logging.getLogger().setLevel(logging.DEBUG)
     query = None
-    if kind == None:
+    if kind is None:
         logging.debug("all")
         query = Category.all()
     elif kind == "forum":
         logging.debug("forum")
         query = ForumCategory.all()
         logging.debug(query)
-	if query != None:
-	    logging.debug("code is about to found")
-	    query.filter('code =', category_code)
-	    result = query.get()
-	    return result
-	else:
-	    logging.debug("hello!")
+    if query is not None:
+        logging.debug("code is about to found")
+        query.filter('code =', category_code)
+        result = query.get()
+        return result
+    else:
+        logging.debug("hello!")
 	    
-def sc_has_authority(user, post):
+def sc_has_authority_for_post(user, post):
     category_auth = False # TODO: Fill in when category specific admin function is available
     post_auth = (post.author.user == user)
     admin_auth = users.is_current_user_admin()

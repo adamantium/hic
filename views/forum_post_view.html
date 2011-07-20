@@ -21,4 +21,13 @@ content: {{ post.content }}
 <div>
     <a href="/forum/{{ category }}/page/{{ page }}">list</a>
 </div>
+comments
+{% for comment in comments %}
+    <div>
+        {{ comment.content }}
+    </div>
+    <div>
+        by {{ comment.author.nickname }}
+    </div>
+{% endfor %}
 {% endblock content %}

@@ -42,10 +42,18 @@ class ClearMemcacheHandler(webapp.RequestHandler):
         else:
             self.response.out.write("memcache flushing failed")
 
+class AddOnePlace(webapp.RequestHandler):
+    def get(self):
+        new_place = PlaceCategory(name="Diner", code="aada", count=0, latitude=1.0, longitude=2.0)
+        new_place.put()
+        self.response.out.write("created new place")
+        
+
 def main():
     logging.getLogger().setLevel(logging.DEBUG) 
     application = webapp.WSGIApplication([('/', MainHandler),
-                                        ('/cmc', ClearMemcacheHandler)
+                                        ('/cmc', ClearMemcacheHandler),
+                                        ('/aop', AddOnePlace)
                                         ],
                                          debug=True)
     util.run_wsgi_app(application)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 
 import os
 import urllib
@@ -23,23 +23,17 @@ class CategoryListHandler(webapp.RequestHandler):
         sc_render_and_response(self, "forum_category_list.html", {'categories': results})
 
 class ListViewHandler(webapp.RequestHandler):
-    def get(self, category):
-        logging.debug('Requested category code: ' + category)
-        category_obj = sc_validate_category(category, kind='forum')
-        if category_obj:
-            query = ForumPost.all()
-            query.filter('category =', category_obj)
-            results = query.fetch(limit=POSTS_PER_PAGE, offset=0)
-            for p in results:
-                logging.debug('requested posts ' + p.title)
-            template_values = {
-                'category': category_obj,
-                'posts': results,
-                'page': 1
-            }
-            sc_render_and_response(self, "forum_post_list.html", template_values)
-        else:
-            sc_error_page(self, "Category not found")
+    def get(self, category_code):
+        category_obj = ForumCategory.get_by_code(category_code)
+        query = ForumPost.all()
+        query.filter('category =', category_obj)
+        results = query.fetch(limit=POSTS_PER_PAGE, offset=0)
+        template_values = {
+            'category': category_obj,
+            'posts': results,
+            'page': 1
+        }
+        sc_render_and_response(self, "forum_post_list.html", template_values)
         
 class ListViewHandlerWithPage(webapp.RequestHandler):
     def get(self, category, page):
@@ -109,7 +103,7 @@ class PostModifyFormHandler(webapp.RequestHandler):
         if category_obj:
             result = ForumPost.get_by_idx(post_idx, category_obj)
             if result:
-                if sc_has_authority(users.get_current_user(), result):
+                if sc_has_authority_for_post(users.get_current_user(), result):
                     template_values = {
                         "category": category_obj,
                         "for_modify": True,
@@ -131,7 +125,7 @@ class PostModifyHandler(webapp.RequestHandler):
         if category_obj:
             result = ForumPost.get_by_idx(int(post_idx), category_obj)
             if result:
-                if sc_has_authority(users.get_current_user(), result):
+                if sc_has_authority_for_post(users.get_current_user(), result):
                     result.title = title
                     result.content = content
                     result.put()
@@ -159,6 +153,22 @@ class PostDeleteHandler(webapp.RequestHandler):
                 sc_error_page(self, "Post Index is available")
         else:
             sc_error_page(self, "Undifined Category")
+
+class CommentWriteHandler(webapp.RequestHandler):
+    def post(self, category):
+        content = self.request.get('content')
+        author = Member.get_by_user(users.get_current_user())
+        category_obj = sc_validate_category(category, kind='forum')
+        if category_obj:
+            new_comment = ForumPost(idx=sc_count(category_obj),
+                                title=title,
+                                content=content,
+                                author=author,
+                                category=category_obj)
+            new_post.put()
+            self.redirect('/forum/%s/' % (category, ))
+        else:
+            sc_error_page(self, "Category not found")
 	
 def main():
     logging.getLogger().setLevel(logging.DEBUG)
@@ -171,7 +181,11 @@ def main():
                                         (r'/forum/([A-Za-z]+)/write', PostWriteHandler),
                                         (r'/forum/([A-Za-z]+)/([0-9]+)/modify-form', PostModifyFormHandler),
                                         (r'/forum/([A-Za-z]+)/([0-9]+)/modify', PostModifyHandler),
-                                        (r'/forum/([A-Za-z]+)/([0-9]+)/delete', PostDeleteHandler)
+                                        (r'/forum/([A-Za-z]+)/([0-9]+)/delete', PostDeleteHandler),
+                                        (r'/forum/([A-Za-z]+)/([0-9]+)/comment/write', CommentWriteHandler)
+                                        #(r'/forum/([A-Za-z]+)/([0-9]+)/comment/modify-form', CommentModifyFormHandler),
+                                        #(r'/forum/([A-Za-z]+)/([0-9]+)/comment/modify', CommentModifyHandler),
+                                        #(r'/forum/([A-Za-z]+)/([0-9]+)/comment/delete', CommentDeleteHandler)
                                         ],
                                         debug=True)
     util.run_wsgi_app(application)
