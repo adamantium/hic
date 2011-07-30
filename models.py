@@ -3,6 +3,8 @@ import logging
 from google.appengine.ext import db
 from google.appengine.ext.db import polymodel
 
+from settings import *
+
 class Member(db.Model):
     user = db.UserProperty(required=True)
     name = db.StringProperty()
@@ -27,14 +29,9 @@ class Category(polymodel.PolyModel):
     
     @classmethod
     def get_by_code(cls, code):
-        logging.getLogger().setLevel(logging.DEBUG)
         query = cls.all()
         query.filter("code =", code)
-        results = query.fetch(limit=100)
-        for p in results:
-            logging.debug(p.name)
-        return results[0]
-        # return query.get()
+        return query.get()
 
 class ForumCategory(Category):
     next = db.SelfReferenceProperty()
@@ -44,7 +41,7 @@ class PlaceCategory(Category):
     longitude = db.FloatProperty()
 
 class Post(polymodel.PolyModel):
-    idx = db.IntegerProperty(required=True) # Unique in a category
+    idx = db.IntegerProperty() # Unique in a category
     author = db.ReferenceProperty(Member)
     title = db.StringProperty()
     content = db.TextProperty()
@@ -52,16 +49,15 @@ class Post(polymodel.PolyModel):
     last_modified = db.DateTimeProperty(auto_now=True)
     category = db.ReferenceProperty(Category)
     status = db.IntegerProperty(default=0) # 0: Normal, 1: Deleted by user, 2: Deleted by admin
-    count = db.IntegerProperty(default=0)
+    read_count = db.IntegerProperty(default=0)
+    comment_count = db.IntegerProperty(default=0)
 
     @classmethod
-    def get_by_idx(cls, idx, category_obj):
-        logging.getLogger().setLevel(logging.DEBUG)
+    def get_by_category(cls, category_obj, page):
         query = cls.all()
         query.filter("category =", category_obj)
-        query.filter("idx =", idx)
-        return query.get()
-        
+        return query.fetch(limit=POSTS_PER_PAGE, offset=(page-1)*POSTS_PER_PAGE)
+
 class ForumPost(Post):
     attached = db.BlobProperty()
     

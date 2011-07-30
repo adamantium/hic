@@ -13,7 +13,7 @@ sidebar
 <br />
     {% for post in posts %}
         <div>
-            <a href="/forum/{{ category.code }}/page/{{ page }}/{{ post.idx }}">{{ post.title }}</a>
+            <a href="/forum/{{ category.code }}/{{ post.id }}?page={{ page }}">{{ post.title }}</a>
             <a href="#">{{ post.author.name }}</a>
             <br>
             {{ post.creation }}

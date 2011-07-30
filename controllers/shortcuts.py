@@ -1,5 +1,7 @@
 import os
 import logging
+import random
+import time
 
 from google.appengine.api import users
 from google.appengine.api import memcache
@@ -8,7 +10,6 @@ from google.appengine.ext.webapp import template
 
 from models import Member, Category, ForumCategory
 
-   
 #
 # Template Related Functions
 #
@@ -57,7 +58,7 @@ def sc_count(category_obj):
         db.run_in_transaction(increment_counter, category_obj)
         return count + 1
 
-def validate_category(handler, category_code, kind=None):
+def validate_category(handler, category_code, kind):
     logging.getLogger().setLevel(logging.DEBUG)
     query = None
     if kind is None:
@@ -96,5 +97,9 @@ def sc_has_authority_for_post(user, post):
     admin_auth = users.is_current_user_admin()
     return (category_auth or post_auth or admin_auth)
 
-def sc_error(self):
-    return "ERROR"
+def sc_create_error(error_msg):
+    timestamp = int(time.time() * random.random())
+    key = str(timestamp + abs(hash(error_msg)))
+    memcache.add(key, [timestamp, error_msg], 20)
+    logging.error(error_msg)
+    return "/error/%s" % (key, )
