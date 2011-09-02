@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}HIC : Admin Page{% endblock title %}
+
+{% block sidebar %}
+sidebar
+{% endblock sidebar %}
+
+{% block content %}
+{{ category }}
+<div>
+	<a href="/forum/{{ topic.key.id }}/new-reply-form">post reply</a>
+</div>
+{% for post in posts %}
+	<div>
+		<br />
+		title: {{ post.title }}
+		<br />
+		author: {{ post.author.nickname }}
+		<br />
+		content: {{ post.content }}
+		<div>
+		    <a href="/forum/{{ post.key.id }}/modify-form">modify</a>
+		    <a href="/forum/{{ post.key.id }}/delete">delete</a>
+		</div>
+	</div>
+{% endfor %}
+<div>
+	<ul>
+	{% for p in total_page %}
+		<li><a href="/forum/{{ topic.key.id }}/page/{{ p }}">{{ p }}</a></li>
+	{% endfor %}
+	</ul>
+</div>
+<div>
+    <a href="/forum/{{ category.code }}/page/{{ page }}">list</a>
+</div>
+{% endblock content %}

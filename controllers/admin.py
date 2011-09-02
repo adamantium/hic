@@ -66,12 +66,12 @@ class ForumCategoryListHandler(webapp.RequestHandler):
 
 class ForumCategoryAddHandler(webapp.RequestHandler):
     def post(self):
-    	category_name = self.request.get('name')
-    	category_des = self.request.get('description')
-    	category = ForumCategory(name=category_name,
-    	                    code=category_name.replace(" ", "").lower(),
-    	                    count=1,
-    	                    description=category_des)
+        category_name = self.request.get('name')
+        category_des = self.request.get('description')
+        category = ForumCategory(name=category_name,
+                            code=category_name.replace(" ", "").lower(),
+                            post_count=0,
+                            description=category_des)
     	category.put()
     	self.redirect('/admin/forum/list')
 

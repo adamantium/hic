@@ -12,13 +12,17 @@ handlers:
   login: admin
   auth_fail_action: unauthorized
 
+- url: /test/.*
+  script: controllers/test.py
+  login: admin
+  auth_fail_action: unauthorized
+
 - url: /user/.*
   script: controllers/user.py
   login: required
-  
+
 - url: /forum/.*
   script: controllers/forum.py
-  login: required
 
 - url: /.*
   script: main.py

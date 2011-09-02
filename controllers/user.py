@@ -15,7 +15,7 @@ from controllers.shortcuts import *
 
 class UserSignupFormHandler(webapp.RequestHandler):
     def get(self):
-        sc_render_and_response(self, "user_singup_form.html", {})
+        sc_render_and_response(self, "user_signup_form.html", {})
 
 class UserModifyFormHandelr(webapp.RequestHandler):
     def get(self):

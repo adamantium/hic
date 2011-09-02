@@ -11,15 +11,15 @@ sidebar
 <div>
     
 <br />
-    {% for post in posts %}
+    {% for topic in topics %}
         <div>
-            <a href="/forum/{{ category.code }}/{{ post.id }}?page={{ page }}">{{ post.title }}</a>
-            <a href="#">{{ post.author.name }}</a>
+            <a href="/forum/{{ topic.key.id }}/page/1">{{ topic.head_post.title }}</a>
+            <a href="#">{{ topic.author.name }}</a>
             <br>
             {{ post.creation }}
         </div>
     {% endfor %}
 <br />
 {{ page }}
-<a href="/forum/{{ category.code }}/write-form">write</a>
+<a href="/forum/{{ category.code }}/new-topic-form">write</a>
 {% endblock content %}
